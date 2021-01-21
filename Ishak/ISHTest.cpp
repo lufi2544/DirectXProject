@@ -85,6 +85,22 @@ F32 TestField::Matreces::ISHMatrix::GetElementValue(F32 i, F32 j)
 	return r; 
 }
 
+void TestField::Matreces::ISHMatrix::SetElementValue(F32 i, F32 j, F32 newValue)
+{
+
+	for (auto& it_Idx : m_Rows)
+	{
+		for (auto& it_it_Idx : it_Idx)
+		{
+			if (it_it_Idx.i == i && it_it_Idx.j == j)
+			{
+				it_it_Idx.val = newValue;				
+			}
+		}
+	}
+
+}
+
 // TODO calculate the determinant.
 F32 TestField::Matreces::ISHMatrix::CalculateDeterminant()
 {
@@ -102,7 +118,6 @@ F32 TestField::Matreces::ISHMatrix::CalculateDeterminant()
 	 for( auto it_mIdx : m_Rows )
 	 {
 	
-
 		for( auto it_it_mIdx : it_mIdx )
 		{
 
@@ -191,7 +206,160 @@ TestField::Matreces::ISHMatrix* TestField::Matreces::ISHMatrix::ComputeMatrixMin
 	return returnMatrix;
 }
 
-void TestField::Matreces::ISHMatrix::ComputeMatrix(std::vector<F32> m)
+TestField::Matreces::ISHMatrix* TestField::Matreces::ISHMatrix::ComputeTranspose()
+{
+	using namespace TestField::Matreces;
+	
+	if (!IsQuadratic())
+	{
+		return nullptr;
+	}
+
+
+	ISHMatrix* returnMatrix = this;
+
+	// Change the i and j of the components of the matrix, then we just compute the new matrix.	
+	std::vector<std::vector<MatrixIndex>>l_MatrixRows = returnMatrix->m_Rows;
+	std::vector<std::vector<MatrixIndex>> n_rows;
+	std::vector<std::vector<MatrixIndex>>::iterator it_Rows =l_MatrixRows.begin();
+	
+
+	// compute the new rows
+
+	while( it_Rows != l_MatrixRows.end() )
+	{
+		std::vector<MatrixIndex>::iterator it_Elements =it_Rows->begin();
+		
+		while ( it_Elements != it_Rows->end() )
+		{
+			
+			F32 n_i = it_Elements->j;
+			F32 n_j = it_Elements->i;
+			
+			it_Elements->i = n_i;
+			it_Elements->j = n_j;
+
+			it_Elements++;
+		}
+
+		n_rows.push_back(*it_Rows);
+		
+		it_Rows++;
+	}
+
+	// organize the rows 
+
+	U32 l_RowMaxIdx = returnMatrix->m_numRows;
+	U32 l_ColMaxIdx = returnMatrix->m_numColumns;
+	std::vector<std::vector<MatrixIndex>>n_OrganizedRows;
+
+
+	for(U32 Idx = 0; Idx < l_RowMaxIdx; ++Idx)
+	{	
+		std::vector<MatrixIndex>OrganizedRow;
+
+		for( auto _Idx: n_rows )
+		{
+			for( auto __Idx :_Idx )
+			{
+				if ((__Idx).i == 1 + Idx)
+				{
+					OrganizedRow.push_back(__Idx);
+				}
+			}
+		}
+		
+		n_OrganizedRows.push_back(OrganizedRow);
+	}
+
+
+	returnMatrix->m_Rows = n_OrganizedRows;
+
+	return returnMatrix;
+}
+
+TestField::Matreces::ISHMatrix* TestField::Matreces::ISHMatrix::ComputeInverse()
+{
+	ISHMatrix* returnMatrix = nullptr;
+
+	if (!IsQuadratic() || !IsInvertible())
+	{
+		
+		std::cout << "The matrix has no inverse." << std::endl;
+
+		return nullptr;
+	}
+	return returnMatrix = *(ComputeAdjunt()->ComputeTranspose()) * ((F32)1 / CalculateDeterminant());
+}
+
+TestField::Matreces::ISHMatrix* TestField::Matreces::ISHMatrix::ComputeAdjunt()
+{
+
+	using namespace TestField::Matreces;
+
+
+	ISHMatrix* returnMatrix = new ISHMatrix(m_numRows,m_numColumns);
+
+
+	if( !IsQuadratic() )
+	{
+		return nullptr;
+	}
+
+	for (auto rows : m_Rows)
+	{
+
+		for (auto elements : rows)
+		{
+			
+			ISHMatrix* ma = ComputeMatrixMinor((elements).i, elements.j);
+			F32 a = ma->CalculateDeterminant();
+			F32 i = std::pow(-1, (elements.i + elements.j));
+			F32 n_elementVal =  i* a;
+
+			returnMatrix->SetElementValue(elements.i, elements.j,n_elementVal);
+
+		}
+
+	}
+
+	return returnMatrix;
+}
+
+bool TestField::Matreces::ISHMatrix::IsQuadratic()
+{
+	return (m_numRows == m_numColumns);
+}
+
+bool TestField::Matreces::ISHMatrix::IsInvertible()
+{
+	return this->CalculateDeterminant() > 0;
+}
+
+
+
+void TestField::Matreces::ISHMatrix::ComputeEmptyMatrix(U32 m, U32 n)
+{
+	
+
+	for( U32 Idx = 0; Idx < m_numColumns; ++Idx )
+	{
+		std::vector<F32>l_Row;
+
+		for( U32 _Idx = 0;_Idx < m_numRows;++_Idx )
+		{
+		
+			l_Row.push_back(0);
+
+		}
+
+		ComputeRow(l_Row,1+Idx);
+
+	}
+
+}
+
+void TestField::Matreces::ISHMatrix::ComputeMatrixFromVector(std::vector<F32> m)
 {
 	
 	 std::vector<F32>l_Row;
@@ -210,9 +378,8 @@ void TestField::Matreces::ISHMatrix::ComputeMatrix(std::vector<F32> m)
 
 				if(column_Idx >= m_numColumns)
 				{
-					U32 row = row_Idx + 1;
 					
-					this->ComputeRow(l_Row,row);
+					this->ComputeRow(l_Row,1+row_Idx);
 					l_Row.clear();
 					row_Idx++;
 					column_Idx = 0;
@@ -244,7 +411,7 @@ void TestField::Matreces::ISHMatrix::ComputeRow(std::vector<F32> m, U32 row)
 	{
 		if( columnIdx < m_numColumns )
 		{
-			U32 column = columnIdx + 1;
+			U32 column = 1+columnIdx;
 
 			l_m.push_back(MatrixIndex(row, column, v));
 

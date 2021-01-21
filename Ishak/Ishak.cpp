@@ -269,9 +269,9 @@ int main()
 	}
 
 
-	std::vector<F32> vec = { 1,0,0,
-							 0,1,0,
-							 0,0,1 };
+	std::vector<F32> vec = { 2,2,2,
+							 3,3,3,
+							 -1,3,-4 };
 
 
 
@@ -288,6 +288,29 @@ int main()
 
 
 	std::cout << *m_minor << std::endl;
+
+	std::cout << std::endl;
+	std::cout << std::endl;
+
+	std ::cout << "The transpose of the matrix is : "<< std::endl;
+
+	std::cout << *(m.ComputeTranspose()) << std::endl;
+
+	std::cout << std::endl;
+	std::cout << std::endl;
+
+	std::cout << "The inverse of the matrix is : " << std::endl;
+
+	TestField::Matreces::ISHMatrix* inverse = (m.ComputeInverse());
+
+	if( m.IsInvertible() )
+	{
+
+		std::cout << *(inverse) << std::endl;
+
+	}
+
+	
 
 	std::cout << std::endl;
 	std::cout << std::endl;

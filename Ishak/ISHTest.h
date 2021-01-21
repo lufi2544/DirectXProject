@@ -215,15 +215,24 @@ namespace TestField
 		struct ISHMatrix
 		{
 			
-			ISHMatrix() = default;
+			ISHMatrix()
+			{
+			
+			};
+
+			ISHMatrix(U32 m , U32 n):
+			m_numRows(m),
+			m_numColumns(n)
+			{
+				ComputeEmptyMatrix(m,n);
+			};
 
 			ISHMatrix( U32 _Rows, U32 _Columns, std::vector<F32> members ):
 			m_numColumns(_Columns),
 			m_numRows(_Rows)
-			{
-				
-				ComputeMatrix(members);
-			}
+			{	
+				ComputeMatrixFromVector(members);
+			};
 
 			// Columns
 			U32 m_numColumns = 0;
@@ -235,22 +244,46 @@ namespace TestField
 
  			virtual F32		   CalculateDeterminant();
 			virtual ISHMatrix* ComputeMatrixMinor(F32 i, F32 j);
-// 			virtual ISHMatrix* ComputeTranspose(){};
-// 			virtual ISHMatrix* ComputeInverse (){};		
+ 			virtual ISHMatrix* ComputeTranspose();
+ 			virtual ISHMatrix* ComputeInverse ();	
+			virtual ISHMatrix* ComputeAdjunt();
+			bool			   IsQuadratic();
+			bool			   IsInvertible();
 
 
 			void InsertRow(std::vector<F32>MatrixRow);
 
 			F32 GetElementValue(F32 i , F32 j);
+			void SetElementValue (F32 i, F32 j, F32 newValue);
 
 			private:
 
-			void ComputeMatrix(std::vector<F32> m);
+			// Helper function for constructing a new matrix with a certain m rows and n columns
+			void  ComputeEmptyMatrix(U32 m, U32 n);
+
+			//  Helper function that creates a matrix ( constructor ).
+			void ComputeMatrixFromVector(std::vector<F32> m);
 
 			// this is a helper function for a constructor of the Matrix.
 			// The constructor will Store the given @row with the @m values. 
 			void ComputeRow(std::vector<F32> m ,U32 row);
-	
+
+			inline ISHMatrix* operator * (F32 num )
+			{
+				for(auto& rows :m_Rows)
+				{
+					for(auto& elements : rows)
+					{
+
+						elements.val *= num;
+
+					}
+				}
+				
+				return this;
+			}
+			
+
 		};
 	};
 };
