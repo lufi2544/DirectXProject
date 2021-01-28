@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="C:\Users\lufi2\AppData\Local\JetBrains\Rider2020.3\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\lufi2\AppData\Local\JetBrains\Rider2020.3\resharper-host\Local\Transient\Rider\v203\SolutionCaches\_Ishak.813499213.00" t="ExcludeRecursive" />
+    <e p="C:\Users\lufi2\Desktop\escritorio\Programming\Projects\DirectXProject" t="IncludeFlat">
+      <e p="Ishak" t="IncludeRecursive">
+        <e p="Ishak.cpp" t="Include" />
+        <e p="Ishak.vcxproj" t="IncludeRecursive" />
+        <e p="ISHTest.cpp" t="Include" />
+        <e p="ISHTest.h" t="Include" />
+        <e p="pch.cpp" t="Include" />
+        <e p="pch.h" t="Include" />
+        <e p="x64\Debug" t="ExcludeRecursive" />
+      </e>
+      <e p="Ishak.sln" t="IncludeFlat" />
+      <e p="packages" t="ExcludeRecursive" />
+      <e p="x64\Debug" t="ExcludeRecursive" />
+    </e>
+  </component>
+</project>
