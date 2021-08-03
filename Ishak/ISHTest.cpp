@@ -1,9 +1,10 @@
 #include "ISHTest.h"
+#include "pch.h"
 #include <math.h>
 
 
 
-void TestField::Matreces::ISHMatrix::InsertRow(std::vector<F32> MatrixRow)
+void Matreces::ISHMatrix::InsertRow(std::vector<F32> MatrixRow)
 {
 	
 	if (m_numRows > 0)
@@ -66,7 +67,7 @@ void TestField::Matreces::ISHMatrix::InsertRow(std::vector<F32> MatrixRow)
  
 }
 
-F32 TestField::Matreces::ISHMatrix::GetElementValue(F32 i, F32 j)
+F32 Matreces::ISHMatrix::GetElementValue(F32 i, F32 j)
 {
 
 	F32 r = 0;
@@ -85,7 +86,7 @@ F32 TestField::Matreces::ISHMatrix::GetElementValue(F32 i, F32 j)
 	return r; 
 }
 
-void TestField::Matreces::ISHMatrix::SetElementValue(F32 i, F32 j, F32 newValue)
+void Matreces::ISHMatrix::SetElementValue(F32 i, F32 j, F32 newValue)
 {
 
 	for (auto& it_Idx : m_Rows)
@@ -102,9 +103,9 @@ void TestField::Matreces::ISHMatrix::SetElementValue(F32 i, F32 j, F32 newValue)
 }
 
 // TODO calculate the determinant.
-F32 TestField::Matreces::ISHMatrix::CalculateDeterminant()
+F32 Matreces::ISHMatrix::CalculateDeterminant()
 {
-	using namespace TestField::Matreces;
+	using namespace Matreces;
 
 		F32 det = 0;
 
@@ -135,23 +136,23 @@ F32 TestField::Matreces::ISHMatrix::CalculateDeterminant()
 	 return det;
 }
 
-TestField::Matreces::ISHMatrix* TestField::Matreces::ISHMatrix::ComputeMatrixMinor(F32 i , F32 j)
+Matreces::ISHMatrix* Matreces::ISHMatrix::ComputeMatrixMinor(F32 i , F32 j)
 {
 
-	using namespace TestField::Matreces;
+	using namespace Matreces;
 	ISHMatrix* returnMatrix = new ISHMatrix();
 
 	ASSERT(m_numRows > 0 && m_numColumns > 0);
 	if(!(m_numRows > 0 && m_numColumns > 0))
 	{
-		return;
+		return returnMatrix;
 	}
 
 	if( (m_numColumns != m_numRows) )
 	{
 		// this is not a quadratic matrix.
 		ASSERT(m_numColumns != m_numRows);
-		return;
+		return returnMatrix;
 										 // || m_numColumns == 1
 	}else if( (m_numColumns == m_numRows) && (m_numRows == 1) )
 	{
@@ -206,9 +207,9 @@ TestField::Matreces::ISHMatrix* TestField::Matreces::ISHMatrix::ComputeMatrixMin
 	return returnMatrix;
 }
 
-TestField::Matreces::ISHMatrix* TestField::Matreces::ISHMatrix::ComputeTranspose()
+Matreces::ISHMatrix* Matreces::ISHMatrix::ComputeTranspose()
 {
-	using namespace TestField::Matreces;
+	using namespace Matreces;
 	
 	if (!IsQuadratic())
 	{
@@ -278,7 +279,7 @@ TestField::Matreces::ISHMatrix* TestField::Matreces::ISHMatrix::ComputeTranspose
 	return returnMatrix;
 }
 
-TestField::Matreces::ISHMatrix* TestField::Matreces::ISHMatrix::ComputeInverse()
+Matreces::ISHMatrix* Matreces::ISHMatrix::ComputeInverse()
 {
 	ISHMatrix* returnMatrix = nullptr;
 
@@ -292,10 +293,10 @@ TestField::Matreces::ISHMatrix* TestField::Matreces::ISHMatrix::ComputeInverse()
 	return returnMatrix = *(ComputeAdjunt()->ComputeTranspose()) * ((F32)1 / CalculateDeterminant());
 }
 
-TestField::Matreces::ISHMatrix* TestField::Matreces::ISHMatrix::ComputeAdjunt()
+Matreces::ISHMatrix* Matreces::ISHMatrix::ComputeAdjunt()
 {
 
-	using namespace TestField::Matreces;
+	using namespace Matreces;
 
 
 	ISHMatrix* returnMatrix = new ISHMatrix(m_numRows,m_numColumns);
@@ -326,19 +327,19 @@ TestField::Matreces::ISHMatrix* TestField::Matreces::ISHMatrix::ComputeAdjunt()
 	return returnMatrix;
 }
 
-bool TestField::Matreces::ISHMatrix::IsQuadratic()
+bool Matreces::ISHMatrix::IsQuadratic()
 {
 	return (m_numRows == m_numColumns);
 }
 
-bool TestField::Matreces::ISHMatrix::IsInvertible()
+bool Matreces::ISHMatrix::IsInvertible()
 {
 	return this->CalculateDeterminant() > 0;
 }
 
 
 
-void TestField::Matreces::ISHMatrix::ComputeEmptyMatrix(U32 m, U32 n)
+void Matreces::ISHMatrix::ComputeEmptyMatrix(U32 m, U32 n)
 {
 	
 
@@ -359,7 +360,7 @@ void TestField::Matreces::ISHMatrix::ComputeEmptyMatrix(U32 m, U32 n)
 
 }
 
-void TestField::Matreces::ISHMatrix::ComputeMatrixFromVector(std::vector<F32> m)
+void Matreces::ISHMatrix::ComputeMatrixFromVector(std::vector<F32> m)
 {
 	
 	 std::vector<F32>l_Row;
@@ -391,9 +392,9 @@ void TestField::Matreces::ISHMatrix::ComputeMatrixFromVector(std::vector<F32> m)
 	 }
 }
 
-void TestField::Matreces::ISHMatrix::ComputeRow(std::vector<F32> m, U32 row)
+void Matreces::ISHMatrix::ComputeRow(std::vector<F32> m, U32 row)
 {
-	using namespace TestField::Matreces;
+	using namespace Matreces;
 
 	std::vector<MatrixIndex>l_m;
 	U32 columnIdx = 0;
@@ -401,7 +402,7 @@ void TestField::Matreces::ISHMatrix::ComputeRow(std::vector<F32> m, U32 row)
 	// The rows or the columns have to be already initialized.
 	ASSERT(m_numColumns != 0);
 	ASSERT(m_numRows != 0);
-
+	
 	if( m_numColumns == 0 || m_numRows == 0 )
 	{
 		return;

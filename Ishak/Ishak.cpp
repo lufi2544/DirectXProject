@@ -14,13 +14,6 @@
 using namespace DirectX;
 namespace DX11 = DirectX;
 
-struct EA
-{
-	int a, b;
-
-};
-
-
 std::ostream& operator << ( std::ostream& os , DX11::FXMVECTOR v  )
 {
 
@@ -32,28 +25,16 @@ std::ostream& operator << ( std::ostream& os , DX11::FXMVECTOR v  )
     return os;
 }
 
-
-
-std::ostream& operator<< (std::ostream& os, EA st)
-{
-
-	os << " a: " << st.a << " b: " << st.b << std::endl;
-
-
-	return os;
-}
-
-
-std::ostream& operator << (std::ostream& os, TestField::Matreces::ISHMatrix matrix)
+std::ostream& operator << (std::ostream& os, Matreces::ISHMatrix matrix)
 {
 
 
 	F32 u = 1;
-	std::vector<std::vector<TestField::Matreces::MatrixIndex>>::iterator it_MatrixRows = matrix.m_Rows.begin();
+	std::vector<std::vector<Matreces::MatrixIndex>>::iterator it_MatrixRows = matrix.m_Rows.begin();
 	
 	while (it_MatrixRows != matrix.m_Rows.end())
 	{
-		std::vector<TestField::Matreces::MatrixIndex>::iterator it_it_MatrixRows = (*it_MatrixRows).begin();
+		std::vector<Matreces::MatrixIndex>::iterator it_it_MatrixRows = (*it_MatrixRows).begin();
 
 		while( it_it_MatrixRows != (*it_MatrixRows).end() )
 		{
@@ -119,24 +100,6 @@ namespace GraphicsFunctions
 	};
 };
 
-
-
-struct Example
-{
-
-	U32 m_a;
-	U16 m_b;
-	U32 m_c;
-
-};
-
-struct Stream 
-{
-	U32 st_a;
-	U32 st_b;
-	U16 st_c;
-};
-
 inline U32 swapU32(U32 value)
 {
 	return	((value & 0x000000FF) << 24
@@ -150,77 +113,6 @@ inline U16 swapU16(U16 value)
 	return ((value & 0x00FF) << 8)
 		|  ((value & 0xFF00) >> 8);
 };
-
-void writeExampleStruct( Example& ex, Stream& stream )
-{
-	stream.st_a = swapU32(ex.m_a);
-	stream.st_b = swapU32(ex.m_b);
-	stream.st_c = swapU16(ex.m_c);
-}
-
-struct Son;
-struct Daughter;
-
-struct Mother
-{
-
-	std::shared_ptr<Son> p_son;
-	std::shared_ptr<Daughter>p_daughter;
-
-	public:
-
-	void SetSon(std::weak_ptr<Son> son)
-	{
-		p_son = son.lock();
-	}
-
-	void SetDaughter(std::weak_ptr<Daughter> daughter)
-	{
-		p_daughter = daughter.lock();
-	}
-
-	~Mother()
-	{
-		std::cout << " Destroying Mother. " << std::endl;
-	}
-
-};
-
-struct Son
-{
-	std::weak_ptr<const Mother>m_pMother;
-public:
-
-	Son(std::shared_ptr<Mother>mother)
-		:m_pMother(mother)
-	{};
-
-	~Son()
-	{
-		std::cout << "Destroying Son." << std::endl;
-	};
-};
-
-struct Daughter
-{
-	std::weak_ptr<const Mother>m_pMother;
-
-public:
-
-	Daughter(std::shared_ptr<Mother>mother)
-		:m_pMother(mother)
-	{};
-
-	~Daughter()
-	{
-		std::cout << "Destroying Daughter." << std::endl;
-	};
-};
-
-
-
-
-
 
 int main()
 {
@@ -275,11 +167,11 @@ int main()
 
 
 
-	TestField::Matreces::ISHMatrix m = TestField::Matreces::ISHMatrix(3,3,vec) ;
+	Matreces::ISHMatrix m = Matreces::ISHMatrix(3,3,vec) ;
 
 
 
-	TestField::Matreces::ISHMatrix* m_minor = m.ComputeMatrixMinor(2,2);
+	Matreces::ISHMatrix* m_minor = m.ComputeMatrixMinor(2,2);
 
 	std::cout << m << std::endl;
 
@@ -301,7 +193,7 @@ int main()
 
 	std::cout << "The inverse of the matrix is : " << std::endl;
 
-	TestField::Matreces::ISHMatrix* inverse = (m.ComputeInverse());
+	Matreces::ISHMatrix* inverse = (m.ComputeInverse());
 
 	if( m.IsInvertible() )
 	{
@@ -317,15 +209,6 @@ int main()
 
 	std::cout << "The determinant is: " << m.CalculateDeterminant()<< std::endl;
 
-// 
-// 	std::shared_ptr< Mother> mother    = std::shared_ptr<Mother>(new Mother) ;
-// 	std::shared_ptr<Son>son			   = std::shared_ptr<Son>(new Son(mother));
-// 	std::shared_ptr<Daughter> daughter = std::shared_ptr<Daughter>(new Daughter(mother));
-// 
-// 	mother->SetDaughter(daughter);
-// 	mother->SetSon(son);
-// 
-// 	int asdfasdf = 0;
 
 
 //     if( !DX11::XMVerifyCPUSupport() )
@@ -348,24 +231,6 @@ int main()
 // 		
 //         XMVECTOR a = f + g;
 //         XMVECTOR b =  XMVector3Dot( f , f );
-// 
-// 
-// 		ho.push_back(2);
-// 
-// 		int al = 3;
-// 
-// 		ho.push_back(0);
-// 
-// 		int s = 0;
-// 
-// 		for ( int i = 0; i < 4;i++ )
-// 		{
-// 
-// 			++s;	
-// 			
-// 		
-// 
-// 		}
 // 		
 // 
 // 

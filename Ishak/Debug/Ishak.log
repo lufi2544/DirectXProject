@@ -1,0 +1,10 @@
+﻿  ISHTest.cpp
+C:\Users\lufi2\Documents\GitHub\DirectXProject\Ishak\ISHTest.cpp(14,13): warning C4244: 'inicializando': conversión de 'uint32_t' a 'float'; posible pérdida de datos
+C:\Users\lufi2\Documents\GitHub\DirectXProject\Ishak\ISHTest.cpp(39,11): warning C4244: '=': conversión de 'uint32_t' a 'float'; posible pérdida de datos
+C:\Users\lufi2\Documents\GitHub\DirectXProject\Ishak\ISHTest.cpp(130,130): warning C4244: '+=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\lufi2\Documents\GitHub\DirectXProject\Ishak\ISHTest.cpp(318,10): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\lufi2\Documents\GitHub\DirectXProject\Ishak\ISHTest.cpp(417,35): warning C4244: 'argumento': conversión de 'uint32_t' a 'float'; posible pérdida de datos
+C:\Users\lufi2\Documents\GitHub\DirectXProject\Ishak\ISHTest.cpp(417,30): warning C4244: 'argumento': conversión de 'uint32_t' a 'float'; posible pérdida de datos
+  Ishak.cpp
+  Generando código...
+  Ishak.vcxproj -> C:\Users\lufi2\Documents\GitHub\DirectXProject\Debug\Ishak.exe

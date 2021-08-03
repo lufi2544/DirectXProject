@@ -3,6 +3,7 @@
 #include <ostream>
 #include <functional>
 #include <assert.h>
+#include "pch.h"
 #include <cassert>
 #include <intrin.h>
 #include <memory>
@@ -12,7 +13,15 @@
 // define some inline assembly that causes a break
 // into the debugger -- this will be different on each
 // target CPU
-#define debugBreak()_asm{ int 3 }
+
+#ifdef _M_IX86
+
+#define debugBreak() _asm{ int 3 }
+#else
+#define debugBreak() __debugbreak()
+
+#endif // _M_IX86
+
 
 #if _DEBUG
 
@@ -73,120 +82,6 @@ inline void reportAssertionFailure(std::string _exp , std::string _file , int _l
 		ASSERT_GLUE(g_static_assertion_fail,__LINE__) \
 		= sizeof(TStaticAssert<!!(expr)>)\
 	}
-
-struct st
-{
-	unsigned int x, y, z, w;
-	
-};
-
-// Whatever tests classes, structs or functionalities that will be tested will be included here.
-namespace TestField
-{
-
-	namespace Exception
-	{
-
-		struct ExceptionTest
-		{
-
-			void RunTest()
-			{
-	
-					int a, b;
-					b = 3;
-
-					std::cin >> a;
-
-					SLOW_ASSERT(a > 0);
-
-			}
-
-		};
-	};
-
-	namespace Lambda
-	{
-	
-		class LamdaTest
-		{
-			public:
-
-			std::function<int(int)>AddNumbers_Lambda(int a)
-			{
-			
-				return[a](int b)
-				{
-
-					return a+b;
-
-				};
-			
-			};
-
-			//Pointer to a function
-
-			// Returns void, is called " function " and takes 2 parameters.
-			void ( *function )( int,bool );
-
-
-
-			static std::function<void(int,st)> TestFunction()
-			{
-
-				st myStruct;
-
-
-				return [&myStruct](int value, st MyStruct)
-				{
-
-					std::cout << " Prechange value: " << value << std::endl;
-					value = 6;
-
-					std::cout << " The value is: " << value << std::endl;
-
-					myStruct.x = 1;
-					MyStruct.y = 2;
-					MyStruct.z = 3;
-					MyStruct.w = 4;
-
-					std::cout << " The struct values are: " << MyStruct.x << " , " << MyStruct.y << " , " << MyStruct.z << std::endl;
-				};
-
-
-
-				auto lam = [&myStruct](int a, float b, bool boo, st _st)
-				{
-
-					_st.x = 33;
-
-					std::cout << _st.x << std::endl;
-					/*	std::cout << my.y << std::endl;*/
-
-					std::cout << a << "  " << b << "  " << boo << " , " << _st.x << " , " << _st.y << " , " << _st.z << std::endl;
-
-					return false;
-					
-				};
-
-			}
-		
-		};
-
-	}
-
-	namespace Enums
-	{
-		enum ETest
-		{
-
-			redcolor = 1,
-			bluecolor = 33,
-			yellowcolor = 2,
-			greencolor
-		};
-
-	};
 
 
 	namespace Matreces
@@ -286,5 +181,5 @@ namespace TestField
 
 		};
 	};
-};
+
 
